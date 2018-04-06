@@ -1,4 +1,5 @@
 #define _USE_MATH_DEFINES
+#include <stdio.h>
 #include <math.h>
 #include <GL/glut.h>
 
@@ -8,11 +9,28 @@
 #define C_Y V_DIM/2		// vertical center point of window
 #define S_LEN 100.0		// side length of hexagon, which is also of the same length as the radius of hexagon
 
+typedef struct {
+	double x;
+	double y;
+} Point;
+
 void init(void)
 {
 	glClearColor(0.0, 0.0, 0.0, 0.0);	// black background
 	glMatrixMode(GL_PROJECTION);
 	gluOrtho2D(0.0, H_DIM, 0.0, V_DIM);
+}
+
+Point vertex(Point p1, Point p2) {
+	double s60 = sin(60 * M_PI / 180.0);
+	double c60 = cos(60 * M_PI / 180.0);
+
+	Point v = {
+		c60 * (p1.x - p2.x) - s60 * (p1.y - p2.y) + p2.x,
+		s60 * (p1.x - p2.x) + c60 * (p1.y - p2.y) + p2.y
+	};
+
+	return v;
 }
 
 void triangle(GLint cx, GLint cy, GLfloat slen)
